@@ -1,0 +1,20 @@
+body {
+    font: 14px sans-serif;
+}
+.axis path, .axis line {
+    fill: none;
+    stroke: black;
+    shape-rendering: crispEdges;
+}
+.axis path{
+    fill: none;
+    stroke: none;
+}
+.bar {
+    fill: steelblue;
+}
+
+text {
+    font-family: Verdana, sans-serif;
+    font-size: 9pt;
+}
