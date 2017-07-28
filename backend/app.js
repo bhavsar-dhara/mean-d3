@@ -2,54 +2,49 @@ module.exports = function (app) {
 
     var mongoose = require('mongoose');
 
-    // mongoose.connect('mongodb://localhost/meanD3Demo', { useMongoClient: true });
-
-    // // connect to local database
-    // var promise = mongoose.connect('mongodb://localhost/meanD3Demo', {
-    //     useMongoClient: true,
-    //     server: {socketOptions: {keepAlive: 1}}
-    // });
-    //
-    // promise.then(function (db) {
-    //     /* Use `db`, for instance `db.model()` */
-    // });
-
-    mongoose.connection.openUri('mongodb://localhost/meanD3Demo', { });
-
+    // To remove deprecated function warning
+    mongoose.connection.openUri('mongodb://localhost/meanD3Demo', {  });
+    //server: {socketOptions: {keepAlive: 1}}
     // Use native promises
-    mongoose.Promise = global.Promise;
+    // mongoose.Promise = global.Promise;
 
-    // Create a schema
-    var TodoSchema = new mongoose.Schema({
-        name: String,
-        completed: Boolean,
-        note: String,
-        created_at: {type: Date, default: Date.now},
-        updated_at: {type: Date, default: ''},
-    });
+    var models = require("./models/models.js")();
 
-    // Create a model based on the schema
-    var Todo = mongoose.model('Todo', TodoSchema);
+    require("./services/barData.service.js")(app, models);
 
-    // Create a todo in memory
-    var todo = new Todo({name: 'Master NodeJS', completed: false, note: 'Getting there...'});
+    // // Create a schema
+    // var BarDataSchema = new mongoose.Schema({
+    //     year: parseInt(Number),
+    //     value: parseInt(Number),
+    //     created_at: {type: Date, default: Date.now},
+    //     updated_at: {type: Date, default: ''}
+    // }, {collection: "bar.data"});
+    //
+    // // Create a model based on the schema
+    // var Data = mongoose.model('Data', BarDataSchema);
+    //
+    // // Create a data in memory
+    // var data = new Data({year: '1990', value: '345'});
 
     // Save it to database
-    todo.save(function (err) {
-        if (err)
-            console.log(err);
-        else
-            console.log(todo);
-    });
+    // data.save(function (err) {
+    //     if (err)
+    //         console.log(err);
+    //     else
+    //         console.log(data);
+    // });
 
-    Todo.create({name: 'Create something with Mongoose', completed: true, note: 'this is one'}, function (err, todo) {
-        if (err) console.log(err);
-        else console.log(todo);
-    });
+    // Creating and saving a data
+    // Data.create({year: '1994', value: '345'}, function (err, data) {
+    //     if (err) console.log(err);
+    //     else console.log(data);
+    // });
 
-    // Find all data in the Todo collection
-    Todo.find(function (err, todos) {
-        if (err) return console.error(err);
-        console.log(todos)
-    });
+    // Find all data in the Data collection
+    // Data.find(function (err, todos) {
+    //     if (err) return console.error(err);
+    //     console.log(todos)
+    // });
+
+
 };
