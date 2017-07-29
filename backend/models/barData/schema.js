@@ -2,7 +2,7 @@ module.exports = function () {
 
     var mongoose = require('mongoose');
 
-    var BarDataSchema = new mongoose.Schema({
+    var BarDataSchema = mongoose.Schema({
         year: parseInt(Number),
         value: parseInt(Number),
         created_at: {type: Date, default: Date.now},

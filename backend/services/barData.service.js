@@ -5,13 +5,13 @@ module.exports = function(app, models) {
     app.post("/api/data/", createData);
     app.get("/api/data/", findAllData);
     app.get("/api/data/:dataId", findDataById);
-    // app.put("/api/data/:dataId", updateData);
-    // app.delete("/api/data/:dataId", deleteData);
+    app.put("/api/data/:dataId", updateData);
+    app.delete("/api/data/:dataId", deleteData);
 
     function createData(req, res) {
         console.log("in server add");
         var data = req.body;
-        console.log("DATA = " + data.year + "=" + data.value);
+        console.log("DATA = " + JSON.stringify(data));
         dataModel
             .createData(data)
             .then(

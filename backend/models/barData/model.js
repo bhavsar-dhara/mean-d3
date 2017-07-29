@@ -1,10 +1,8 @@
 module.exports = function () {
 
     var mongoose = require('mongoose');
-
     var BarDataSchema = require('./schema.js')();
-
-    var Data = mongoose.model('BarData', BarDataSchema);
+    var Data = mongoose.model('Data', BarDataSchema);
 
     // Create APIs to manage calls from the UI
     var api = {

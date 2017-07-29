@@ -8,8 +8,8 @@
             createData: createData,
             findAllData: findAllData,
             findDataById: findDataById,
-            // updateData: updateData,
-            // deleteData: deleteData
+            updateData: updateData,
+            deleteData: deleteData
         };
         return api;
 

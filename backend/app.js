@@ -2,11 +2,14 @@ module.exports = function (app) {
 
     var mongoose = require('mongoose');
 
+    mongoose.connect('mongodb://localhost/meanD3Demo', { useMongoClient: true });
+
     // To remove deprecated function warning
-    mongoose.connection.openUri('mongodb://localhost/meanD3Demo', {  });
+    // mongoose.connection.openUri('mongodb://localhost/meanD3Demo', {  });
     //server: {socketOptions: {keepAlive: 1}}
+
     // Use native promises
-    // mongoose.Promise = global.Promise;
+    mongoose.Promise = global.Promise;
 
     var models = require("./models/models.js")();
 
@@ -22,7 +25,7 @@ module.exports = function (app) {
     //
     // // Create a model based on the schema
     // var Data = mongoose.model('Data', BarDataSchema);
-    //
+
     // // Create a data in memory
     // var data = new Data({year: '1990', value: '345'});
 
@@ -35,7 +38,7 @@ module.exports = function (app) {
     // });
 
     // Creating and saving a data
-    // Data.create({year: '1994', value: '345'}, function (err, data) {
+    // Data.create({year: '1998', value: '999'}, function (err, data) {
     //     if (err) console.log(err);
     //     else console.log(data);
     // });
