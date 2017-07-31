@@ -13,7 +13,6 @@
         
         function saveFile(file) {
             console.log("in client saveFile");
-            return $http.post("/api/upload/", file);
         }
         
         function getFile() {

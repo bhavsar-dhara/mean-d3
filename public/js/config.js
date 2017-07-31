@@ -26,6 +26,11 @@
                 controller: "FileUploadController",
                 controllerAs: "ctrl"
             })
+            .when("/fileUploadDemo/:fileId", {
+                templateUrl: "views/fileUploadSuccessfulDemo.html",
+                controller: "FileUploadController",
+                controllerAs: "ctrl"
+            })
             .when("/realTimeDemo", {
                 templateUrl: "views/realTimeDemo.html",
                 controller: "RealTimeController",

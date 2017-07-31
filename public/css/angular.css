@@ -34,9 +34,19 @@ table, th , td {
     border-collapse: collapse;
     padding: 5px;
 }
+
 table tr:nth-child(odd) {
     background-color: #f1f1f1;
 }
+
 table tr:nth-child(even) {
     background-color: #ffffff;
+}
+
+input.form-control,
+textarea.form-control,
+select.form-control,
+button.form-control,
+#input-grp.input-group {
+    margin-bottom: 5px;
 }

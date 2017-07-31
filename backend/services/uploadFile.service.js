@@ -13,13 +13,20 @@ module.exports = function (app, models) {
         console.log("in server saveFile");
         console.log(req.body);
         console.log(req.file);
-        var newUpload = req.body;
+        console.log(req.body.fileName);
+        var newUpload = {
+            name: req.body.fileName,
+            created: Date.now(),
+            file: req.file
+        };
         console.log("DATA = " + JSON.stringify(newUpload));
         uploadFileModel
             .saveFile(newUpload)
             .then(
                 function (file) {
-                    res.json(file);
+                    // TODO
+                    res.redirect("/");
+                    console.log(file);
                 },
                 function (error) {
                     res.statusCode(400).send(error);
