@@ -13,24 +13,14 @@
         };
         return api;
 
-        // var mongoose = require('mongoose');
-        //
-        // var BarDataSchema = require('/backend/models/barData/schema.js')();
-        //
-        // var Data = mongoose.model('BarData', BarDataSchema);
-
         function createData(data) {
-            console.log("in client add");
-            console.log("DATA = " + data.year + "=" + data.value);
+            // console.log("in client add");
+            // console.log("DATA = " + data.year + "=" + data.value);
             return $http.post("/api/data/", data);
-
-            // Data.create(data, function (err, data) {
-            //     if (err) console.log(err);
-            //     else console.log(data);
-            // });
         }
 
         function findAllData() {
+            // console.log("in client findall");
             var url = "/api/data/";
             return $http.get(url);
         }

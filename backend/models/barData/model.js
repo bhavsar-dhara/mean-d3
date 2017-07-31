@@ -16,13 +16,14 @@ module.exports = function () {
 
     // Creates a new data instance
     function createData(data) {
-        console.log("in model add");
-        console.log("DATA = " + data.year + "=" + data.value);
+        // console.log("in model add");
+        // console.log("DATA = " + data.year + "=" + data.value);
         return Data.create(data);
     }
 
     // Retrieves all data instances
     function findAllData() {
+        // console.log("in model findall");
         return Data.find();
     }
 

@@ -5,17 +5,17 @@
         .directive('chartForm', ChartForm)
         .directive('barChart', BarChart);
 
-    function D3Controller($rootScope) {
+    function D3Controller($scope) {
 
-        $rootScope.options = {width: 600, height: 400, 'bar': 'aaa'};
-        $rootScope.data = [1, 2, 3, 4];
-        $rootScope.hovered = function (d) {
-            $rootScope.barValue = d;
-            $rootScope.$apply();
+        $scope.options = {width: 600, height: 400, 'bar': 'aaa'};
+        $scope.data = [1, 2, 3, 4];
+        $scope.hovered = function (d) {
+            $scope.barValue = d;
+            $scope.$apply();
         };
-        $rootScope.barValue = 'None';
+        $scope.barValue = 'None';
 
-        $rootScope.title = "Bar Chart Using AngularJS with D3 and MongoDB.";
+        $scope.title = "Bar Chart Using AngularJS with D3 and MongoDB.";
 
     }
     

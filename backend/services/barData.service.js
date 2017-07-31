@@ -9,9 +9,9 @@ module.exports = function(app, models) {
     app.delete("/api/data/:dataId", deleteData);
 
     function createData(req, res) {
-        console.log("in server add");
+        // console.log("in server add");
         var data = req.body;
-        console.log("DATA = " + JSON.stringify(data));
+        // console.log("DATA = " + JSON.stringify(data));
         dataModel
             .createData(data)
             .then(
@@ -25,10 +25,12 @@ module.exports = function(app, models) {
     }
 
     function findAllData(req, res) {
+        // console.log("in server findall..");
         dataModel
             .findAllData()
             .then(
                 function (datas) {
+                    // console.log("success findall" + datas.toString());
                     res.json(datas);
                 },
                 function (error) {
