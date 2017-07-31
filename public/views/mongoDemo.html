@@ -1,0 +1,9 @@
+<div class="form" id="ext-content">
+    <h1> Add Data to Mongo DB </h1>
+    <br/><label>Year: </label><input title="Year" type="number" ng-model="year" maxlength="4" max="2017">
+    <br/><label>Value: </label><input title="Value" type="number" ng-model="value" maxlength="3" min="0">
+    <br/>
+    <button ng-click="onAdd()">Add Data</button>
+    <br/><label>Added bar data: </label>{{year}}, {{value}}
+    <br/><label>Error: </label>{{error}}
+</div>

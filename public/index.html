@@ -1,34 +1,67 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="meanD3" ng-cloak>
 <head>
     <meta charset="UTF-8">
+    <!--<meta http-equiv="Content-Security-Policy" content="'font-src': data: ;">-->
+
     <title>MEAN D3 Demo</title>
 
     <link rel="stylesheet" href="css/angular.css">
+    <link rel = "stylesheet"
+          href = "https://ajax.googleapis.com/ajax/libs/angular_material/1.1.4/angular-material.min.css">
 
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.6/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.5/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.5/angular-route.min.js"></script>
+    <script src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.6.5/angular-animate.min.js"></script>
+    <script src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.6.5/angular-aria.min.js"></script>
+    <script src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.6.5/angular-messages.min.js"></script>
+    <script src = "https://ajax.googleapis.com/ajax/libs/angular_material/1.1.4/angular-material.min.js"></script>
     <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
     <script src="js/d3Chart.js"></script>
 
-    <script type="text/javascript" src="js/app.js" ></script>
-    <script type="text/javascript" src="js/service/barData.client.service.js" ></script>
+    <script type="text/javascript">
+        angular.element(document.getElementsByTagName('head')).append(angular.element('<base href="' + window.location.pathname + '" />'));
+    </script>
 
 </head>
 
 <body>
 
-    <!--creating an app-->
-    <div ng-app="meanD3">
-        <!--setting an alias-->
-        <div ng-controller="meanD3Controller">
-            <h1 ng-show='title'>{{title}}</h1>
+    <md-content class="md-padding">
+        <md-nav-bar
+                md-selected-nav-item="currentNavItem"
+                nav-bar-aria-label="navigation links">
 
-            <bar-chart height="options.height" data="data" hovered="hovered(args)"></bar-chart>
-            <chart-form></chart-form>
+            <md-nav-item md-nav-href="d3Demo" name="d3Demo">
+                D3 Chart Demo
+            </md-nav-item>
+            <md-nav-item md-nav-href="mongoDemo" name="mongoDemo">
+                Mongo DB Demo
+            </md-nav-item>
+            <md-nav-item md-nav-href="fileUploadDemo" name="fileUploadDemo">
+                File Upload Demo
+            </md-nav-item>
+            <md-nav-item md-nav-href="realTimeDemo" name="realTimeDemo">
+                Real Time Demo
+            </md-nav-item>
+            <md-nav-item md-nav-href="googleMapDemo" name="googleMapDemo">
+                Google Map Demo
+            </md-nav-item>
 
-            <add-data></add-data>
-        </div>
-    </div>
+        </md-nav-bar>
+    </md-content>
+
+    <div ng-view></div>
+
+    <script type="text/javascript" src="js/app.js" ></script>
+    <script type="text/javascript" src="js/config.js" ></script>
+    <script type="text/javascript" src="controllers/mainCtrl.js" ></script>
+    <script type="text/javascript" src="controllers/d3Ctrl.js" ></script>
+    <script type="text/javascript" src="controllers/mongoCtrl.js" ></script>
+    <script type="text/javascript" src="js/service/barData.client.service.js" ></script>
+    <script type="text/javascript" src="controllers/fileUploadCtrl.js" ></script>
+    <script type="text/javascript" src="controllers/realTimeCtrl.js" ></script>
+    <script type="text/javascript" src="controllers/googleMapCtrl.js" ></script>
 
 </body>
 
