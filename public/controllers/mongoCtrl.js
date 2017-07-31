@@ -12,9 +12,9 @@
         init();
 
         $scope.onAdd = function () {
-            console.log("in button click");
-            console.log("in button click: " + $scope.year);
-            console.log("in button click: " + $scope.value);
+            // console.log("in button click");
+            // console.log("in button click: " + $scope.year);
+            // console.log("in button click: " + $scope.value);
             var data = {
                 year: $scope.year,
                 value: $scope.value
