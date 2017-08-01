@@ -10,5 +10,6 @@ module.exports = function (app) {
 
     require("./services/barData.service.js")(app, models);
     require("./services/uploadFile.service.js")(app, models);
+    require("./services/event.service.js")(app, models);
 
 };

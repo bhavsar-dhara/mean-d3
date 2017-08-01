@@ -3,8 +3,11 @@
         .module("meanD3")
         .config(Config);
 
-    function Config($routeProvider, $locationProvider) {
+    function Config($routeProvider, $locationProvider, $sceDelegateProvider) {
         $locationProvider.html5Mode(true);
+        $sceDelegateProvider.resourceUrlWhitelist(['self',
+            new RegExp('^(http[s]?):\/\/(w{3}.)?maps.googleapis\.com/.+$'),
+            new RegExp('^(http[s]?):\/\/(w{3}.)?api.eventful\.com/.+$')]);
         $routeProvider
             .when("/", {
                 templateUrl: "views/main.html",

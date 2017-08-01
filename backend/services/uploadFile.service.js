@@ -5,6 +5,12 @@ module.exports = function (app, models) {
     var fs = require('fs');
     var multer = require('multer');
     var upload = multer({dest: __dirname + '/../../public/uploads'});
+
+    var  mongodb = require('mongodb'),
+        Grid = mongodb.Grid; //use Grid via the native mongodb driver
+
+    // var grid = new Grid(db, 'fs'); //db being a handle to your database
+
     app.post("/api/upload", upload.single('file'), saveFile);
     app.get("/api/upload/", getFile);
     app.get("/api/upload/:uploadId", getFileById);
