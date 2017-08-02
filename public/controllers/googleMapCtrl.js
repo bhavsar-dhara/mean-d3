@@ -206,13 +206,13 @@
         }
 
         function getSafeHtml(description) {
-            if(description != null) {
+            if(description !== null) {
                 return $sce.trustAsHtml(description);
             }
         }
 
         function getSafeUrl(eventUrl) {
-            if(eventUrl != null) {
+            if(eventUrl !== null) {
                 return $sce.trustAsResourceUrl(eventUrl);
             }
         }

@@ -1,6 +1,7 @@
 module.exports = function (app, models) {
 
     var uploadFileModel = models.uploadFileModel;
+    var jsonImportModel = models.jsonImportModel;
 
     var fs = require('fs');
     var multer = require('multer');
@@ -25,14 +26,30 @@ module.exports = function (app, models) {
             created: Date.now(),
             file: req.file
         };
+        var obj;
+        fs.readFile(req.file.path, 'utf8', function (err, data) {
+            if (err) console.error(err);
+            obj = JSON.parse(tsvToJSON(data));
+            // console.log(obj);
+        });
         console.log("DATA = " + JSON.stringify(newUpload));
         uploadFileModel
             .saveFile(newUpload)
             .then(
                 function (file) {
                     // TODO
-                    res.redirect("/");
-                    console.log(file);
+                    // res.redirect("/fileUploadDemo/"+file._id);
+                    jsonImportModel
+                        .insertData(obj);
+                    // console.log(file);
+                },
+                function (error) {
+                    res.statusCode(400).send(error);
+                }
+            )
+            .then(
+                function (objData) {
+                    console.log("Success in table json.data");
                 },
                 function (error) {
                     res.statusCode(400).send(error);
@@ -69,4 +86,40 @@ module.exports = function (app, models) {
             );
     }
 
+    //var tsv is the TSV file with headers
+    function tsvToJSON(tsv) {
+
+        var lines = tsv.split("\r\n");
+
+        var result = [];
+
+        // "TOA5","CR800Series","CR800","40055","CR800.Std.30.01","CPU:US300_170121_Enc.CR8","36685","US300_DATA"
+        var headers0 = lines[0].split(",");
+        // "TIMESTAMP","RECORD","US300","US300_Volt"
+        var headers1 = lines[1].split(",");
+        // "TS","RN","Bar","mV" -> will use this one as the header
+        var headers2 = lines[2].split(",");
+        // "","","Smp","Smp"
+        var headers3 = lines[3].split(",");
+
+        for (var i = 4; i < lines.length; i++) {
+
+            var obj = {};
+            var currentLine = lines[i].split(",");
+
+            for (var j = 0; j < headers2.length; j++) {
+                // obj[headers2[j]] = parseFloat(currentLine[j]) || currentLine[j] || Date(currentLine[j]);
+                obj[headers2[j]] = currentLine[j];
+            }
+
+            result.push(obj);
+        }
+
+        // var json_result = JSON.stringify(result);
+        //
+        // console.log(json_result);
+
+        //return result; //JavaScript object
+        return JSON.stringify(result); //JSON
+    }
 };

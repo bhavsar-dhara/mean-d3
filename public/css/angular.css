@@ -46,12 +46,18 @@ table tr:nth-child(even) {
     background-color: #ffffff;
 }
 
+/* File Upload Demo CSS */
 input.form-control,
 textarea.form-control,
 select.form-control,
 button.form-control,
 #input-grp.input-group {
     margin-bottom: 5px;
+}
+
+.class {
+    color: red;
+    font-size: 16px;
 }
 
 /* Google Map Tab CSS*/
