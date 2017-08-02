@@ -13,13 +13,7 @@ module.exports = function () {
     return api;
 
     function insertData(data) {
-        console.log("in insertData");
+        // console.log("in insertData: ");
         return JsonImport.collection.insertMany(data);
-        /*, function (err, res) {
-            assert.equal(null, err);
-            assert.equal(50, res.insertedCount);
-            if (err) console.err(err);
-            console.log("Success");
-        })*/
     }
 };

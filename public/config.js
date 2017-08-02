@@ -4,7 +4,6 @@
         .config(Config);
 
     function Config($routeProvider, $locationProvider, $sceDelegateProvider) {
-        $locationProvider.html5Mode(true);
         $sceDelegateProvider.resourceUrlWhitelist(['self',
             new RegExp('^(http[s]?):\/\/(w{3}.)?maps.googleapis\.com/.+$'),
             new RegExp('^(http[s]?):\/\/(w{3}.)?api.eventful\.com/.+$')]);
@@ -29,7 +28,7 @@
                 controller: "FileUploadController",
                 controllerAs: "ctrl"
             })
-            .when("/fileUploadDemo/:fileId", {
+            .when("/fileUploadDemo/:fileId/plot", {
                 templateUrl: "views/fileUploadSuccessfulDemo.html",
                 controller: "FileUploadController",
                 controllerAs: "ctrl"
@@ -47,5 +46,7 @@
             .otherwise({
                 redirectTo: "/"
             });
+        $locationProvider.html5Mode(true);
+        $locationProvider.hashPrefix('');
     }
 })();

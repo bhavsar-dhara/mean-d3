@@ -26,21 +26,18 @@ module.exports = function (app, models) {
             created: Date.now(),
             file: req.file
         };
-        var obj;
-        fs.readFile(req.file.path, 'utf8', function (err, data) {
-            if (err) console.error(err);
-            obj = JSON.parse(tsvToJSON(data));
-            // console.log(obj);
-        });
-        console.log("DATA = " + JSON.stringify(newUpload));
+        var fileRes;
+        // console.log("DATA = " + JSON.stringify(newUpload));
         uploadFileModel
             .saveFile(newUpload)
             .then(
                 function (file) {
-                    // TODO
-                    // res.redirect("/fileUploadDemo/"+file._id);
-                    jsonImportModel
-                        .insertData(obj);
+                    fileRes = file;
+                    fs.readFile(req.file.path, 'utf8', function (err, data) {
+                        if (err) console.error(err);
+                        jsonImportModel
+                            .insertData(JSON.parse(tsvToJSON(data)));
+                    });
                     // console.log(file);
                 },
                 function (error) {
@@ -50,6 +47,15 @@ module.exports = function (app, models) {
             .then(
                 function (objData) {
                     console.log("Success in table json.data");
+                    // res.statusCode(200).send(fileObj._id);
+                    // res.redirect("/#/fileUploadDemo" + fileRes._id + "/plot");
+                    // res.redirect(url.format({
+                    //     pathname: "/plot",
+                    //     query: {
+                    //         "fileId": fileRes._id
+                    //     }
+                    // }));
+                    res.redirect("/plot/" + fileRes._id);
                 },
                 function (error) {
                     res.statusCode(400).send(error);

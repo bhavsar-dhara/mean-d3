@@ -38,6 +38,10 @@
 
                         // Try HTML5 geolocation.
                         if (navigator.geolocation) {
+                            console.log("in if");
+                            vm.lat = 42.3601;
+                            vm.lng = -71.0589;
+                            searchEvents();
                             navigator.geolocation.getCurrentPosition(function (position) {
                                 var pos = {
                                     lat: position.coords.latitude,
@@ -47,7 +51,7 @@
                                 vm.lat = pos.lat;
                                 vm.lng = pos.lng;
                                 searchEvents();
-                                // console.log(navigator.geolocation);
+                                console.log(navigator.geolocation);
                                 // getCityName(pos.lat, pos.lng);
 
                                 // infoWindowGeo.setPosition(pos);
@@ -57,6 +61,10 @@
                                 handleLocationError(true, infoWindowGeo, map.getCenter());
                             });
                         } else {
+                            console.log("in else");
+                            vm.lat = 42.3601;
+                            vm.lng = -71.0589;
+                            searchEvents();
                             // Browser doesn't support Geolocation
                             handleLocationError(false, infoWindowGeo, map.getCenter());
                         }
@@ -120,8 +128,8 @@
         init();
 
         function searchEvents() {
-            // console.log(vm.lat);
-            // console.log(vm.lng);
+            console.log(vm.lat);
+            console.log(vm.lng);
             EventfulService
                 .searchEventsOnLatLng(vm.searchText, vm.lat, vm.lng)
                 .then(
@@ -184,11 +192,7 @@
                         marker.content = '<div class="infoWindowContent">'
                             + marker.venueName
                             + '<p>' + marker.venueAddress + '</p>'
-                            + '<p> <a href="#/user/'
-                            + vm.userId
-                            + '/event/'
-                            + eventRes._id
-                            + '">Event Details</a> </p> </div>';
+                            + '</div>';
 
                         google.maps.event.addListener(marker, 'click', function(){
                             infoWindow.setContent('<div class="capitalize"><strong>' + marker.title.toLowerCase() + '</strong><br>' + marker.content);

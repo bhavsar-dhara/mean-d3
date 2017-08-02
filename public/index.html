@@ -25,7 +25,7 @@
     <script type="text/javascript">
         angular.element(document.getElementsByTagName('head')).append(angular.element('<base href="' + window.location.pathname + '" />'));
     </script>
-
+    <base href="/" target="_self" />
 </head>
 
 <body>
@@ -72,6 +72,8 @@
     <script type="text/javascript" src="js/tsvToJson.js"></script>
     <!--<script type="text/javascript" src="../backend/mongoSave.js"></script>-->
 
+    <script src="core/core.module.js"></script>
+    <script src="core/formatDate/formatDate.filter.js"></script>
 </body>
 
 </html>

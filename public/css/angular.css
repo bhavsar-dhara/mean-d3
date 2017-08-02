@@ -120,15 +120,14 @@ button.form-control,
 }
 
 .eventList {
-    padding-top: 60px;
-    padding-bottom: 60px;
+    margin-top: 75px;
     background-color: white;
     position: absolute;
     top: 0;
     right: 0;
-    height: -webkit-calc(100% - 50px);
-    height: -moz-calc(100% - 50px);
-    height: calc(100% - 50px);
+    height: -webkit-calc(100% - 75px);
+    height: -moz-calc(100% - 75px);
+    height: calc(100% - 75px);
     overflow: auto;
 }
 
