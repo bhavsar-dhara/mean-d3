@@ -31,7 +31,7 @@ d3.custom.barChart = function module() {
                 .scale(y1)
                 .orient('left');
 
-            var barW = chartW / _data.length;
+            var barWidth = chartW / _data.length;
 
             if(!svg) {
                 svg = d3.select(this)
@@ -43,7 +43,7 @@ d3.custom.barChart = function module() {
                 container.append('g').classed('y-axis-group axis', true);
             }
 
-            svg.transition().duration(duration).attr({width: width, height: height})
+            svg.transition().duration(duration).attr({width: width, height: height});
             svg.select('.container-group')
                 .attr({transform: 'translate(' + margin.left + ',' + margin.top + ')'});
 

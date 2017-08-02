@@ -1,9 +1,7 @@
 (function () {
     angular
         .module("meanD3")
-        .controller("FileUploadController", FileUploadController)
-        .directive("ChartForm", ChartForm)
-        .directive('barChart', BarChart);
+        .controller("FileUploadController", FileUploadController);
 
     function FileUploadController($scope, FileService, $routeParams, $location) {
 
@@ -14,58 +12,66 @@
         function init() {
 
             if(fileId !== undefined) {
-                $scope.textStr = "Redirect Successful";
+                chart();
+                // $scope.textStr = "Redirect Successful";
             }
-
         }
         init();
     }
 
-    function ChartForm() {
-        return {
-            restrict: 'E',
-            replace: true,
-            controller: function AppCtrl ($scope) {
-                $scope.update = function(d, i){ $scope.data = randomData(); };
-                function randomData(){
-                    return d3.range(~~(Math.random()*25)+1).map(function(d, i){return ~~(Math.random()*500);});
-                }
-            },
-            template: '<div class="form">' +
-            'Height: {{options.height}}<br />' +
-            '<input type="range" ng-model="options.height" min="100" max="800"/>' +
-            '<br /><button ng-click="update()">Update Data</button>' +
-            '<br />Hovered bar data: {{barValue}}</div>'
-        }
-    }
+    function chart() {
+        var svg = d3.select("svg"),
+            margin = {top: 20, right: 20, bottom: 30, left: 50},
+            width = +svg.attr("width") - margin.left - margin.right,
+            height = +svg.attr("height") - margin.top - margin.bottom,
+            g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    function BarChart() {
-        var chart = d3.custom.barChart();
-        return {
-            restrict: 'E',
-            replace: true,
-            transclude: true,
-            scope:{
-                height: '=height',
-                data: '=data',
-                hovered: '&hovered'
-            },
-            link: function(scope, element, attrs) {
-                var chartEl = d3.select(element[0]);
-                chart.on('customHover', function(d, i){
-                    scope.hovered({args:d});
-                });
+        var parseTime = d3.timeParse("%d-%b-%y");
 
-                scope.$watch('data', function (newVal, oldVal) {
-                    chartEl.datum(newVal).call(chart);
-                });
+        var x = d3.scaleTime()
+            .rangeRound([0, width]);
 
-                scope.$watch('height', function(d, i){
-                    chartEl.call(chart.height(scope.height));
-                })
-            },
-            template: '<div class="chart"></div>'
-        }
+        var y = d3.scaleLinear()
+            .rangeRound([height, 0]);
+
+        var area = d3.area()
+            .x(function(d) { return x(d.date); })
+            .y1(function(d) { return y(d.close); });
+
+        console.log('/../data.tsv');
+
+        // TODO change data.tsv to service call
+        d3.tsv('/../data.tsv', function(d) {
+            d.date = parseTime(d.date);
+            d.close = +d.close;
+            return d;
+        }, function(error, data) {
+            if (error) throw error;
+
+            x.domain(d3.extent(data, function(d) { return d.date; }));
+            y.domain([0, d3.max(data, function(d) { return d.close; })]);
+            area.y0(y(0));
+
+            g.append("path")
+                .datum(data)
+                .attr("fill", "steelblue")
+                .attr("d", area);
+
+            g.append("g")
+                .attr("transform", "translate(0," + height + ")")
+                .call(d3.axisBottom(x));
+
+            g.append("g")
+                .call(d3.axisLeft(y))
+                .append("text")
+                .attr("fill", "#000")
+                .attr("transform", "rotate(-90)")
+                .attr("y", 6)
+                .attr("dy", "0.71em")
+                .attr("text-anchor", "end")
+                .text("Price ($)");
+        });
+
     }
 
 })();
