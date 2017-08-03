@@ -5,22 +5,14 @@
 
     function FileService($http) {
         var api = {
-            saveFile: saveFile,
-            getFile: getFile,
-            getFileById: getFileById
+            getFileDataById: getFileDataById
         };
         return api;
-        
-        function saveFile(file) {
-            console.log("in client saveFile");
-        }
-        
-        function getFile() {
-            
-        }
-        
-        function getFileById() {
-            
+
+        function getFileDataById(fileId) {
+            console.log("in getFileDataById client service");
+            var url = "/api/file/" + fileId;
+            return $http.get(url);
         }
     }
 })();

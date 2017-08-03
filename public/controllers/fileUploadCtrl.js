@@ -11,15 +11,16 @@
 
         function init() {
 
-            if(fileId !== undefined) {
-                chart();
+            if (fileId !== undefined) {
+                chart(FileService, fileId, $scope);
                 // $scope.textStr = "Redirect Successful";
             }
         }
+
         init();
     }
 
-    function chart() {
+    function chart(FileService, fileId, $scope) {
         var svg = d3.select("svg"),
             margin = {top: 20, right: 20, bottom: 30, left: 50},
             width = +svg.attr("width") - margin.left - margin.right,
@@ -35,21 +36,26 @@
             .rangeRound([height, 0]);
 
         var area = d3.area()
-            .x(function(d) { return x(d.date); })
-            .y1(function(d) { return y(d.close); });
+            .x(function (d) {
+                return x(d.date);
+            })
+            .y1(function (d) {
+                return y(d.close);
+            });
 
-        console.log('/../data.tsv');
-
-        // TODO change data.tsv to service call
-        d3.tsv('/../data.tsv', function(d) {
+        d3.tsv("data.tsv", function (d) {
             d.date = parseTime(d.date);
             d.close = +d.close;
             return d;
-        }, function(error, data) {
+        }, function (error, data) {
             if (error) throw error;
 
-            x.domain(d3.extent(data, function(d) { return d.date; }));
-            y.domain([0, d3.max(data, function(d) { return d.close; })]);
+            x.domain(d3.extent(data, function (d) {
+                return d.date;
+            }));
+            y.domain([0, d3.max(data, function (d) {
+                return d.close;
+            })]);
             area.y0(y(0));
 
             g.append("path")
@@ -72,6 +78,102 @@
                 .text("Price ($)");
         });
 
+        // workingChart();
+
+        // requiredChart();
+    }
+
+    function requiredChart() {
+        FileService
+            .getFileDataById(fileId)
+            .then(function (response) {
+                console.log("id = " + response.data._id);
+                console.log("data = " + response.data.dataStr);
+                console.log("createdDate = " + response.data.created_at);
+                var addedData = response.data.dataStr;
+                if (addedData) {
+                    d3.json(addedData, function (error, data) {
+                        if (error) throw error;
+
+                        var dataCallback = function (d) {
+                            d.TS = parseDate(d.TS);
+                            d.RN = +d.RN;
+                            d.Bar = +d.Bar;
+                            d.mV = +d.mV;
+                        };
+
+                        addedData.forEach(dataCallback);
+
+                        x.domain(d3.extent(data, function (d) {
+                            return d.TS;
+                        }));
+                        y.domain([0, d3.max(data, function (d) {
+                            return d.Bar;
+                        })]);
+                        area.y0(y(0));
+
+                        g.append("path")
+                            .datum(data)
+                            .attr("fill", "steelblue")
+                            .attr("d", area);
+
+                        g.append("g")
+                            .attr("transform", "translate(0," + height + ")")
+                            .call(d3.axisBottom(x));
+
+                        g.append("g")
+                            .call(d3.axisLeft(y))
+                            .append("text")
+                            .attr("fill", "#000")
+                            .attr("transform", "rotate(-90)")
+                            .attr("y", 6)
+                            .attr("dy", "0.71em")
+                            .attr("text-anchor", "end")
+                            .text("Pressure (Bar)");
+                    });
+                    console.log("response received...")
+                } else {
+                    $scope.error = "Unable to plot Data";
+                }
+            });
+
+    }
+
+    function workingChart() {
+        d3.tsv("data.tsv", function (d) {
+            d.date = parseTime(d.date);
+            d.close = +d.close;
+            return d;
+        }, function (error, data) {
+            if (error) throw error;
+
+            x.domain(d3.extent(data, function (d) {
+                return d.date;
+            }));
+            y.domain([0, d3.max(data, function (d) {
+                return d.close;
+            })]);
+            area.y0(y(0));
+
+            g.append("path")
+                .datum(data)
+                .attr("fill", "steelblue")
+                .attr("d", area);
+
+            g.append("g")
+                .attr("transform", "translate(0," + height + ")")
+                .call(d3.axisBottom(x));
+
+            g.append("g")
+                .call(d3.axisLeft(y))
+                .append("text")
+                .attr("fill", "#000")
+                .attr("transform", "rotate(-90)")
+                .attr("y", 6)
+                .attr("dy", "0.71em")
+                .attr("text-anchor", "end")
+                .text("Price ($)");
+        });
     }
 
 })();

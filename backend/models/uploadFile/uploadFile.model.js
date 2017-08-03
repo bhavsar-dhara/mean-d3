@@ -21,8 +21,9 @@ module.exports = function () {
         console.log("in model getFile");
     }
 
-    function getFileById() {
+    function getFileById(fileId) {
         console.log("in model getFileById");
+        return File.findById(fileId);
     }
 
 };

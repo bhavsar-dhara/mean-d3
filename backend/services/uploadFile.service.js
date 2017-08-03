@@ -2,6 +2,7 @@ module.exports = function (app, models) {
 
     var uploadFileModel = models.uploadFileModel;
     var jsonImportModel = models.jsonImportModel;
+    var fileImportModel = models.fileImportModel;
 
     var fs = require('fs');
     var multer = require('multer');
@@ -13,8 +14,7 @@ module.exports = function (app, models) {
     // var grid = new Grid(db, 'fs'); //db being a handle to your database
 
     app.post("/api/upload", upload.single('file'), saveFile);
-    app.get("/api/upload/", getFile);
-    app.get("/api/upload/:uploadId", getFileById);
+    app.get("/api/file/:fileId", getFileDataById);
 
     function saveFile(req, res) {
         console.log("in server saveFile");
@@ -35,58 +35,51 @@ module.exports = function (app, models) {
                     fileRes = file;
                     fs.readFile(req.file.path, 'utf8', function (err, data) {
                         if (err) console.error(err);
-                        jsonImportModel
-                            .insertData(JSON.parse(tsvToJSON(data)));
+                        var fileStr = {
+                            dataStr: tsvToJSON(data)
+                        };
+                        fileImportModel
+                            .insertFileData(fileStr)
+                            .then(
+                                function (fileObjData) {
+                                    console.log("Success in table json.file.data.. " + fileObjData._id);
+                                    res.redirect("/plot/" + fileObjData._id);
+                                    // jsonImportModel
+                                    //     .insertData(JSON.parse(fileObjData.dataStr))
+                                    //     .then(
+                                    //         function (objData) {
+                                    //             console.log("Success in table json.data");
+                                    //             res.redirect("/plot/" + fileRes._id);
+                                    //         },
+                                    //         function (error) {
+                                    //             res.statusCode(400).send(error);
+                                    //         }
+                                    //     );
+                                },
+                                function (error) {
+                                    res.statusCode(400).send(error);
+                                }
+                            );
+
                     });
                     // console.log(file);
                 },
                 function (error) {
                     res.statusCode(400).send(error);
                 }
-            )
-            .then(
-                function (objData) {
-                    console.log("Success in table json.data");
-                    // res.statusCode(200).send(fileObj._id);
-                    // res.redirect("/#/fileUploadDemo" + fileRes._id + "/plot");
-                    // res.redirect(url.format({
-                    //     pathname: "/plot",
-                    //     query: {
-                    //         "fileId": fileRes._id
-                    //     }
-                    // }));
-                    res.redirect("/plot/" + fileRes._id);
-                },
-                function (error) {
-                    res.statusCode(400).send(error);
-                }
             );
     }
 
-    function getFile(req, res) {
-        // console.log("in server getFile..");
-        uploadFileModel
-            .getFile()
-            .then(
-                function (files) {
-                    // console.log("success findall" + files.toString());
-                    res.json(files);
-                },
-                function (error) {
-                    res.statusCode(400).send(error);
-                }
-            );
-    }
-
-    function getFileById(req, res) {
+    function getFileDataById(req, res) {
         var fileId = req.params.fileId;
-        uploadFileModel
-            .getFileById(fileId)
+        fileImportModel
+            .getFileDataById(fileId)
             .then(
-                function (file) {
-                    res.json(file);
+                function (data) {
+                    res.json(data);
                 },
                 function (error) {
+                    console.log("in getFileDataById server error");
                     res.statusCode(400).send(error);
                 }
             );
