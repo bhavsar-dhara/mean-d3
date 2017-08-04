@@ -88,7 +88,9 @@ module.exports = function (app, models) {
     //var tsv is the TSV file with headers
     function tsvToJSON(tsv) {
 
-        var lines = tsv.split("\r\n");
+        var linesWOQuotes = tsv.replace(/['"]+/g, '');
+
+        var lines = linesWOQuotes.split("\r\n");
 
         var result = [];
 
@@ -107,8 +109,9 @@ module.exports = function (app, models) {
             var currentLine = lines[i].split(",");
 
             for (var j = 0; j < headers2.length; j++) {
-                // obj[headers2[j]] = parseFloat(currentLine[j]) || currentLine[j] || Date(currentLine[j]);
-                obj[headers2[j]] = currentLine[j];
+                obj[headers2[j]] = currentLine[j] || parseFloat(currentLine[j]) || parseInt(currentLine[j])
+                    || new Date(Date.parse(currentLine[j])) || currentLine[j];
+                // obj[headers2[j]] = currentLine[j];
             }
 
             result.push(obj);
