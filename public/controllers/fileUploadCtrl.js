@@ -82,10 +82,15 @@
                     arrayOfObjects.forEach(function (d) {
                         // var regex = new RegExp("^\\d\\d\\d\\d-(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01]) (00|0[0-9]|1[0-9]|2[0-3]):([0-9]|[0-5][0-9]):([0-9]|[0-5][0-9]).?(0?[0-9]?[0-9]?)$");
                             // /(\d{4})-(\d{2})-(\d{2})\s+(\d{2}):(\d{2}):(\d{2}).(\d{3})/
-                        var regex = new RegExp("^\\d\\d\\d\\d-(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01]) (00|0[0-9]|1[0-9]|2[0-3]):(0?[0-9]|[0-5][0-9]):(0?[0-9]|[0-5][0-9]).([0-9][0-9]?)$");
-                        console.log( ",,, ,,, ,,, " + d.TS);
-                        console.log( ",,, ,,, ,,, " + regex.test(d.TS));
-                        d.TS = regex.test(d.TS) ? parseTime(d.TS) : parseTimeMS(d.TS);
+
+                        // regexp for yyyy-mm-dd hh:mm:ss.ss
+                        var regex1 = new RegExp("^\\d\\d\\d\\d-(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01]) (00|0[0-9]|1[0-9]|2[0-3]):(0?[0-9]|[0-5][0-9]):(0?[0-9]|[0-5][0-9]).([0-9][0-9])$");
+                        // regexp for yyyy-mm-dd hh:mm:ss.s~0~
+                        var regex2 = new RegExp("^\\d\\d\\d\\d-(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01]) (00|0[0-9]|1[0-9]|2[0-3]):(0?[0-9]|[0-5][0-9]):(0?[0-9]|[0-5][0-9]).([0-9])$");
+                        // console.log( ",,, " + d.TS);
+                        // console.log( ",,, ,,, " + regex1.test(d.TS));
+                        // console.log( ",,, ,,, ,,, " + regex2.test(d.TS));
+                        d.TS = regex1.test(d.TS) ? parseTime(d.TS) : (regex2.test(d.TS) ? parseTime(d.TS + '0') : parseTimeMS(d.TS));
                         d.RN = +d.RN;
                         d.Bar = +d.Bar;
                         d.mV = +d.mV;
@@ -136,9 +141,9 @@
                             "translate(" + (width/2) + " ," +
                             (height + margin.top + 20) + ")")
                         .append("text")
-                        .attr("class", "label")
-                        .attr("x", width)
-                        .attr("y", -6)
+                        // .attr("class", "label")
+                        // .attr("x", width)
+                        // .attr("y", -6)
                         .style("text-anchor", "end")
                         .text("DateTime");
 
