@@ -29,7 +29,7 @@ module.exports = function (app, models) {
                                         console.log("event created..." + event.eventId);
                                         res.json(event);
                                     } else {
-                                        console.log("Error in create Event");
+                                        console.error("Error in create Event");
                                     }
                                 },
                                 function (error) {

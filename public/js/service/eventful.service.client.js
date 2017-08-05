@@ -35,7 +35,7 @@
                     .replace("TEXT", searchText)
                     .replace("LOCATION", location);
             }
-            console.log("url = " + url);
+            // console.log("url = " + url);
             return $http.jsonp(url, {jsonpCallbackParam: 'callback'});
         }
 
@@ -53,7 +53,7 @@
                     .replace("LAT", latitude)
                     .replace("LNG", longitude);
             }
-            console.log("url = " + url);
+            // console.log("url = " + url);
             return $http.jsonp(url, {jsonpCallbackParam: 'callback'});
         }
     }

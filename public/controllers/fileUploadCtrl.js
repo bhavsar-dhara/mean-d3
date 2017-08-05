@@ -7,7 +7,7 @@
 
         var vm = this;
         var fileId = $routeParams.fileId;
-        console.log(fileId);
+        // console.log(fileId);
 
         function init() {
 
@@ -29,7 +29,7 @@
 
         var parseTime = d3.timeParse("%Y-%m-%d %H:%M:%S.%L");
         var parseTimeMS = d3.timeParse("%Y-%m-%d %H:%M:%S");
-        var formatTime = d3.timeFormat("%Y-%m-%d %H:%M:%S.%L" || "%Y-%m-%d %H:%M:%S");
+        var formatTime = d3.timeFormat("%Y-%m-%d %H:%M:%S.%L");
 
         var x = d3.scaleTime()
             .rangeRound([0, width]);
@@ -43,7 +43,7 @@
         }
 
         function getMilliSeconds(d) {
-            console.log(".. " + formatTime(new Date(d.TS)));
+            // console.log(".. " + formatTime(new Date(d.TS)));
             return d.TS.getTime();
         }
 
@@ -66,11 +66,11 @@
         // workingChart(x, y, area, g, parseTime, height);
 
         requiredChart(x, y, area, g, parseTime, formatTime, width, height,
-            margin, FileService, fileId, getDate, getMilliSeconds, parseTimeMS);
+            margin, FileService, fileId, getDate, getMilliSeconds, parseTimeMS, $scope);
     }
 
     function requiredChart(x, y, area, g, parseTime, formatTime, width, height,
-                           margin, FileService, fileId, getDate, getMilliSeconds, parseTimeMS) {
+                           margin, FileService, fileId, getDate, getMilliSeconds, parseTimeMS, $scope) {
         FileService
             .getFileDataById(fileId)
             .then(function (response) {
@@ -79,28 +79,25 @@
 
                 if (arrayOfObjects) {
 
-                    arrayOfObjects.forEach(function (d) {
-                        // var regex = new RegExp("^\\d\\d\\d\\d-(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01]) (00|0[0-9]|1[0-9]|2[0-3]):([0-9]|[0-5][0-9]):([0-9]|[0-5][0-9]).?(0?[0-9]?[0-9]?)$");
-                            // /(\d{4})-(\d{2})-(\d{2})\s+(\d{2}):(\d{2}):(\d{2}).(\d{3})/
+                    // regexp for yyyy-mm-dd hh:MM:ss.ss
+                    var regex1 = new RegExp("^\\d\\d\\d\\d-(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01]) (00|0[0-9]|1[0-9]|2[0-3]):(0?[0-9]|[0-5][0-9]):(0?[0-9]|[0-5][0-9]).([0-9][0-9])$");
+                    // regexp for yyyy-mm-dd hh:MM:ss.s~0~
+                    var regex2 = new RegExp("^\\d\\d\\d\\d-(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01]) (00|0[0-9]|1[0-9]|2[0-3]):(0?[0-9]|[0-5][0-9]):(0?[0-9]|[0-5][0-9]).([0-9])$");
 
-                        // regexp for yyyy-mm-dd hh:mm:ss.ss
-                        var regex1 = new RegExp("^\\d\\d\\d\\d-(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01]) (00|0[0-9]|1[0-9]|2[0-3]):(0?[0-9]|[0-5][0-9]):(0?[0-9]|[0-5][0-9]).([0-9][0-9])$");
-                        // regexp for yyyy-mm-dd hh:mm:ss.s~0~
-                        var regex2 = new RegExp("^\\d\\d\\d\\d-(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01]) (00|0[0-9]|1[0-9]|2[0-3]):(0?[0-9]|[0-5][0-9]):(0?[0-9]|[0-5][0-9]).([0-9])$");
-                        // console.log( ",,, " + d.TS);
-                        // console.log( ",,, ,,, " + regex1.test(d.TS));
-                        // console.log( ",,, ,,, ,,, " + regex2.test(d.TS));
-                        d.TS = regex1.test(d.TS) ? parseTime(d.TS) : (regex2.test(d.TS) ? parseTime(d.TS + '0') : parseTimeMS(d.TS));
+                    arrayOfObjects.forEach(function (d) {
+                        // console.log("date time = " + d.TS);
+                        // console.log("... " + formatTime(new Date(d.TS)));
+                        // console.log(".. : " + regex1.test(d.TS) ? console.log(parseTime(d.TS)) : (regex2.test(d.TS) ? console.log(parseTime(d.TS + '0')) : console.log(parseTimeMS(d.TS))))
+                        d.TS = regex1.test(d.TS) ? parseTime(d.TS + '0') : (regex2.test(d.TS) ? parseTime(d.TS + '00') : parseTimeMS(d.TS));
                         d.RN = +d.RN;
                         d.Bar = +d.Bar;
                         d.mV = +d.mV;
                     });
 
                     var data = arrayOfObjects.map(function(d) {
-                        console.log(d.TS);
+                        // console.log("milli = " + getMilliSeconds(d));
+                        // console.log("date time = " + d.TS);
                         // console.log("... " + formatTime(new Date(d.TS)));
-                        // console.log(d.Bar);
-                        console.log("milli = " + getMilliSeconds(d));
                         return {
                             TS: new Date(d.TS),
                             Bar: d.Bar
@@ -108,8 +105,8 @@
                     });
 
                     // get max and min dates - this assumes data is sorted
-                    var minDate = getDate(data[0]),
-                        maxDate = getDate(data[data.length-1]);
+                    // var minDate = getDate(data[0]),
+                    //     maxDate = getDate(data[data.length-1]);
 
                     // var x = d3.time.scale().domain([minDate, maxDate]).range([0, w]);
 
@@ -117,8 +114,8 @@
                     // const timeMin = d3.min(data, function (d) { formatTime(d.TS) });
                     // const timeMax = d3.max(data, function(d) { formatTime(d.TS) });
 
-                    console.log(minDate);
-                    console.log(maxDate);
+                    // console.log(minDate);
+                    // console.log(maxDate);
 
                     // x.domain([minDate, maxDate]);
                     x.domain(d3.extent(data, function (d) {
@@ -136,14 +133,10 @@
 
                     g.append("g")
                         .attr("transform", "translate(0," + height + ")")
-                        .call(d3.axisBottom(x))
-                        .attr("transform",
-                            "translate(" + (width/2) + " ," +
-                            (height + margin.top + 20) + ")")
+                        .call(d3.axisBottom(x)
+                            .ticks(5)
+                            .tickFormat(d3.timeFormat("%H:%M:%S.%L")))
                         .append("text")
-                        // .attr("class", "label")
-                        // .attr("x", width)
-                        // .attr("y", -6)
                         .style("text-anchor", "end")
                         .text("DateTime");
 

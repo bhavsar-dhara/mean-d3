@@ -28,7 +28,7 @@ function tsvToJSON(tsv) {
 
     var json_result = JSON.stringify(result);
 
-    console.log(json_result);
+    // console.log(json_result);
 
     //return result; //JavaScript object
     return json_result; //JSON

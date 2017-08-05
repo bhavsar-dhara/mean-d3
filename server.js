@@ -19,7 +19,7 @@ app.use(logger('dev'));
 // app.get('/plot/:fileId', function(req, res){
 app.get('/plot/:fileId', function(req, res){
     var fileId = req.params.fileId;
-    console.log("in /plot function - " + fileId);
+    // console.log("in /plot function - " + fileId);
     res.redirect('/#/fileUploadDemo/' + fileId + '/plot');
 });
 

@@ -18,9 +18,9 @@ module.exports = function (app, models) {
 
     function saveFile(req, res) {
         console.log("in server saveFile");
-        console.log(req.body);
-        console.log(req.file);
-        console.log(req.body.fileName);
+        // console.log(req.body);
+        // console.log(req.file);
+        // console.log(req.body.fileName);
         var newUpload = {
             name: req.body.fileName,
             created: Date.now(),

@@ -38,7 +38,7 @@
 
                         // Try HTML5 geolocation.
                         if (navigator.geolocation) {
-                            console.log("in if");
+                            // console.log("in if");
                             vm.lat = 42.3601;
                             vm.lng = -71.0589;
                             searchEvents();
@@ -51,7 +51,7 @@
                                 vm.lat = pos.lat;
                                 vm.lng = pos.lng;
                                 searchEvents();
-                                console.log(navigator.geolocation);
+                                // console.log(navigator.geolocation);
                                 // getCityName(pos.lat, pos.lng);
 
                                 // infoWindowGeo.setPosition(pos);
@@ -61,7 +61,7 @@
                                 handleLocationError(true, infoWindowGeo, map.getCenter());
                             });
                         } else {
-                            console.log("in else");
+                            // console.log("in else");
                             vm.lat = 42.3601;
                             vm.lng = -71.0589;
                             searchEvents();
@@ -128,8 +128,8 @@
         init();
 
         function searchEvents() {
-            console.log(vm.lat);
-            console.log(vm.lng);
+            // console.log(vm.lat);
+            // console.log(vm.lng);
             EventfulService
                 .searchEventsOnLatLng(vm.searchText, vm.lat, vm.lng)
                 .then(
@@ -149,7 +149,7 @@
                         }
                     },
                     function (error) {
-                        console.log("Something went wrong..." + error);
+                        console.error("Something went wrong..." + error);
                     }
                 );
         }
