@@ -80,10 +80,14 @@
                         // console.log("date time = " + d.TS);
                         // console.log("... " + formatTime(new Date(d.TS)));
                         return {
+                            RN: d.RN,
+                            mV: d.mV,
                             TS: new Date(d.TS),
                             Bar: d.Bar
                         };
                     });
+
+                    $scope.datas = data;
 
                     x.domain(d3v4.extent(data, function (d) {
                         return d.TS;

@@ -5,7 +5,21 @@
 
     <br /> <br />
 
+    <div>
     <svg width="480" height="500"></svg>
+
+    <label>Table Data: </label>
+    <table>
+        <tr ng-repeat="x in datas">
+            <!--<td>{{ x.RN }}</td>-->
+            <!--<td>{{ x.mV }}</td>-->
+            <td hide="true">{{ x.RN }}</td>
+            <td hide="true">{{ x.mV }}</td>
+            <td>{{ x.TS }}</td>
+            <td>{{ x.Bar }}</td>
+        </tr>
+    </table>
+    </div>
 
     <br /> <br />
 
