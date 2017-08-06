@@ -33,11 +33,6 @@
                 controller: "FileUploadController",
                 controllerAs: "ctrl"
             })
-            .when("/realTimeDemo", {
-                templateUrl: "views/realTimeDemo.html",
-                controller: "RealTimeController",
-                controllerAs: "ctrl"
-            })
             .when("/googleMapDemo", {
                 templateUrl: "views/googleMapDemo.html",
                 controller: "GoogleMapController",
