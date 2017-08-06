@@ -22,7 +22,7 @@
     }
 
     function lineChart(FileService, fileId, $scope) {
-        var d3v4 = require(d3v4);
+        // var d3v4 = require(d3v4);
         var svg = d3v4.select("svg"),
             margin = {top: 20, right: 20, bottom: 30, left: 50},
             width = +svg.attr("width") - margin.left - margin.right,
