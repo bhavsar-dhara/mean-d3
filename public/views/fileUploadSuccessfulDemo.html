@@ -5,17 +5,33 @@
 
     <br/> <br/>
 
-    <div class="container">
+    <svg width="960" height="500"></svg>
+
+    <br /> <br />
+
+    <label>Table Data: </label>
+    <table>
+        <tr ng-repeat="x in datas">
+            <!--<td>{{ x.RN }}</td>-->
+            <!--<td>{{ x.mV }}</td>-->
+            <td hide="true">{{ x.RN }}</td>
+            <td hide="true">{{ x.mV }}</td>
+            <td>{{ x.TS }}</td>
+            <td>{{ x.Bar }}</td>
+        </tr>
+    </table>
+
+    <!--<div class="container">
         <div class="floatLeft">
-            <svg width="480" height="500"></svg>
+            <svg width="960" height="500"></svg>
         </div>
 
         <div class="floatRight">
             <label>Table Data: </label>
             <table>
                 <tr ng-repeat="x in datas">
-                    <!--<td>{{ x.RN }}</td>-->
-                    <!--<td>{{ x.mV }}</td>-->
+                    &lt;!&ndash;<td>{{ x.RN }}</td>&ndash;&gt;
+                    &lt;!&ndash;<td>{{ x.mV }}</td>&ndash;&gt;
                     <td hide="true">{{ x.RN }}</td>
                     <td hide="true">{{ x.mV }}</td>
                     <td>{{ x.TS }}</td>
@@ -23,7 +39,7 @@
                 </tr>
             </table>
         </div>
-    </div>
+    </div>-->
 
     <br/> <br/>
 

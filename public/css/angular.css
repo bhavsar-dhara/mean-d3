@@ -2,7 +2,7 @@
 body {
     font: 14px sans-serif;
 }
-.axis path, .axis line {
+/*.axis path, .axis line {
     fill: none;
     stroke: black;
     shape-rendering: crispEdges;
@@ -13,7 +13,7 @@ body {
 }
 .bar {
     fill: steelblue;
-}
+}*/
 
 .chart div {
     font: 10px sans-serif;
@@ -195,15 +195,38 @@ div.capitalize {
 }
 
 .floatLeft {
-    width: 50%;
+    width: 75%;
     float: left;
 }
-
 .floatRight {
-    width: 50%;
+    width: 25%;
     float: right;
 }
-
 .container {
     overflow: hidden;
+}
+
+path {
+    stroke: steelblue;
+    stroke-width: 2;
+    fill: none;
+}
+.axis path,
+.axis line {
+    fill: none;
+    stroke: grey;
+    stroke-width: 1;
+    shape-rendering: crispEdges;
+}
+div.tooltip {
+    position: absolute;
+    text-align: center;
+    width: 120px;
+    height: 28px;
+    padding: 2px;
+    font: 12px sans-serif;
+    background: lightsteelblue;
+    border: 0px;
+    border-radius: 8px;
+    pointer-events: none;
 }

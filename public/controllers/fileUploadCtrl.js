@@ -12,13 +12,152 @@
         function init() {
 
             if (fileId !== undefined) {
-                lineChart(FileService, fileId, $scope);
+                scatterPlot(FileService, fileId, $scope);
+                // lineChart(FileService, fileId, $scope);
                 // chart(FileService, fileId, $scope);
                 // $scope.textStr = "Redirect Successful";
             }
         }
 
         init();
+    }
+
+    function scatterPlot(FileService, fileId, $scope) {
+
+        // Adds the svg canvas
+        // Set the dimensions of the canvas / graph
+        // Define the div for the tooltip
+        var svg = d3.select("svg"),
+            margin = {top: 30, right: 20, bottom: 30, left: 50},
+            width = +svg.attr("width") - margin.left - margin.right,
+            height = +svg.attr("height") - margin.top - margin.bottom,
+            svg = svg.append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")"),
+            div = svg.append("div").attr("class", "tooltip").style("opacity", 0);
+
+        // Parse the date / time
+        var parseTime = d3.time.format("%Y-%m-%d %H:%M:%S.%L").parse;
+        var parseTimeMS = d3.time.format("%Y-%m-%d %H:%M:%S").parse;
+        var formatTime = d3.time.format("%Y-%m-%d %H:%M:%S.%L");
+
+        // Set the ranges
+        var x = d3.time.scale()
+            .rangeRound([0, width]);
+
+        var y = d3.scale.linear()
+            .rangeRound([height, 0]);
+
+        // helper function
+        function getDate(d) {
+            return new Date(d.TS);
+        }
+
+        // Define the axes
+        var xAxis = d3.svg.axis().scale(x)
+            .orient("bottom").ticks(5).tickFormat(d3.time.format("%H:%M:%S.%L"));
+
+        var yAxis = d3.svg.axis().scale(y)
+            .orient("left").ticks(15);
+
+        // Define the line
+        var line = d3.svg.line()
+            .x(function (d) {
+                return x(getDate(d));
+            })
+            .y(function (d) {
+                return y(d.Bar);
+            });
+
+        // Get the data
+        FileService
+            .getFileDataById(fileId)
+            .then(function (response) {
+                var addedData = response.data.dataStr;
+                var arrayOfObjects = eval(addedData);
+
+                if (arrayOfObjects) {
+
+                    // regexp for yyyy-mm-dd hh:MM:ss.ss
+                    var regex1 = new RegExp("^\\d\\d\\d\\d-(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01]) (00|0[0-9]|1[0-9]|2[0-3]):(0?[0-9]|[0-5][0-9]):(0?[0-9]|[0-5][0-9]).([0-9][0-9])$");
+                    // regexp for yyyy-mm-dd hh:MM:ss.s~0~
+                    var regex2 = new RegExp("^\\d\\d\\d\\d-(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01]) (00|0[0-9]|1[0-9]|2[0-3]):(0?[0-9]|[0-5][0-9]):(0?[0-9]|[0-5][0-9]).([0-9])$");
+
+                    arrayOfObjects.forEach(function (d) {
+                        // console.log("date time = " + d.TS);
+                        // console.log("... " + formatTime(new Date(d.TS)));
+                        // console.log(".. : " + regex1.test(d.TS) ? console.log(parseTime(d.TS)) : (regex2.test(d.TS) ? console.log(parseTime(d.TS + '0')) : console.log(parseTimeMS(d.TS))))
+                        d.TS = regex1.test(d.TS) ? parseTime(d.TS + '0') : (regex2.test(d.TS) ? parseTime(d.TS + '00') : parseTimeMS(d.TS));
+                        d.RN = +d.RN;
+                        d.Bar = +d.Bar;
+                        d.mV = +d.mV;
+                    });
+
+                    var data = arrayOfObjects.map(function (d) {
+                        // console.log("milli = " + getMilliSeconds(d));
+                        // console.log("date time = " + d.TS);
+                        // console.log("... " + formatTime(new Date(d.TS)));
+                        return {
+                            RN: d.RN,
+                            mV: d.mV,
+                            TS: new Date(d.TS),
+                            Bar: d.Bar
+                        };
+                    });
+
+                    // Setting data for the table
+                    $scope.datas = data;
+
+                    // Scale the range of the data
+                    x.domain(d3.extent(data, function (d) {
+                        return d.TS;
+                    }));
+                    y.domain([0, d3.max(data, function (d) {
+                        return Math.ceil(d.Bar);
+                    })]);
+
+                    // Add the line path.
+                    svg.append("path")
+                        .attr("class", "line")
+                        .attr("d", line(data));
+
+                    // Add the scatterplot
+                    svg.selectAll("dot")
+                        .data(data)
+                        .enter()
+                        .append("circle")
+                        .attr("r", 2)
+                        .attr("cx", function (d) {
+                            return x(getDate(d));
+                        })
+                        .attr("cy", function (d) {
+                            return y(d.Bar);
+                        })
+                        .on("mouseover", function (d) {
+                            div.transition()
+                                .duration(200)
+                                .style("opacity", 0.9);
+                            div.html(formatTime(d.TS) + "<br/>" + d.Bar)
+                                .style("left", (d3.event.pageX) + "px")
+                                .style("top", (d3.event.pageY - 28) + "px");
+                        })
+                        .on("mouseout", function (d) {
+                            div.transition()
+                                .duration(500)
+                                .style("opacity", 0);
+                        });
+
+                    // Add the X Axis
+                    svg.append("g")
+                        .attr("class", "x axis")
+                        .attr("transform", "translate(0," + height + ")")
+                        .call(xAxis);
+
+                    // Add the Y Axis
+                    svg.append("g")
+                        .attr("class", "y axis")
+                        .call(yAxis);
+                }
+            });
     }
 
     function lineChart(FileService, fileId, $scope) {
