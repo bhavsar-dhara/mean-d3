@@ -193,3 +193,17 @@ div.capitalize {
     border-top: 1px solid #ccc;
     padding-top: 10px;
 }
+
+.floatLeft {
+    width: 50%;
+    float: left;
+}
+
+.floatRight {
+    width: 50%;
+    float: right;
+}
+
+.container {
+    overflow: hidden;
+}
