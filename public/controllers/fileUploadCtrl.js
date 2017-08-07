@@ -33,7 +33,7 @@
             height = +svg.attr("height") - margin.top - margin.bottom,
             svg = svg.append("g")
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")"),
-            div = svg.append("div").attr("class", "tooltip").style("opacity", 0);
+            div = d3.select("body").append("div").attr("class", "tooltip").style("opacity", 0);
 
         // Parse the date / time
         var parseTime = d3.time.format("%Y-%m-%d %H:%M:%S.%L").parse;
@@ -137,8 +137,8 @@
                                 .duration(200)
                                 .style("opacity", 0.9);
                             div.html(formatTime(d.TS) + "<br/>" + d.Bar)
-                                .style("left", (d3.event.pageX) + "px")
-                                .style("top", (d3.event.pageY - 28) + "px");
+                                .style("left", (d3.event.pageX + 20) + "px")
+                                .style("top", (d3.event.pageY + 20) + "px");
                         })
                         .on("mouseout", function (d) {
                             div.transition()

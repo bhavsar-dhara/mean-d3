@@ -7,19 +7,58 @@
 
     <svg width="960" height="500"></svg>
 
-    <br /> <br />
+    <br/> <br/>
 
-    <label>Table Data: </label>
-    <table>
-        <tr ng-repeat="x in datas">
-            <!--<td>{{ x.RN }}</td>-->
-            <!--<td>{{ x.mV }}</td>-->
-            <td hide="true">{{ x.RN }}</td>
-            <td hide="true">{{ x.mV }}</td>
-            <td>{{ x.TS }}</td>
-            <td>{{ x.Bar }}</td>
-        </tr>
-    </table>
+    <div class="container">
+
+        <div class="floatLeft">
+            <label>Table Data: </label>
+            <table>
+                <tr ng-repeat="x in datas">
+                    <!--<td>{{ x.RN }}</td>-->
+                    <!--<td>{{ x.mV }}</td>-->
+                    <td hide="true">{{ x.RN }}</td>
+                    <td hide="true">{{ x.mV }}</td>
+                    <td>{{ x.TS }}</td>
+                    <td>{{ x.Bar }}</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="floatRight">
+            <div class="form-group">
+                <h3>Upload a new file here:</h3>
+                <label for="fileName">
+                    File Name
+                </label>
+                <input name="fileName"
+                       id="fileName"
+                       ng-model="upload.fileName"
+                       class="form-control"
+                       required/>
+                <br/>
+            </div>
+            <form action="/api/upload"
+                  method="post"
+                  enctype="multipart/form-data">
+                <label for="file">File:</label>
+                <input type="file"
+                       name="file"
+                       id="file"
+                       ng-model="upload.file"
+                       ngf-select
+                       ngf-max-size="25MB"
+                       class="form-control"
+                       required/>
+                <br/>
+                <input name="fileName"
+                       value="{{upload.fileName}}"
+                       style="display: none"/>
+                <input type="submit" value="Submit" class="form-control"/>
+            </form>
+        </div>
+
+    </div>
 
     <!--<div class="container">
         <div class="floatLeft">
@@ -41,20 +80,20 @@
         </div>
     </div>-->
 
-    <br/> <br/>
+    <!--<br/> <br/>
 
     <div class="form-group">
-        <h3>Upload a new file here:</h3>
-        <label for="fileName">
-            File Name
-        </label>
-        <input name="fileName"
-               id="fileName"
-               ng-model="upload.fileName"
-               class="form-control"
-               required/>
-        <br/>
-    </div>
+    <h3>Upload a new file here:</h3>
+    <label for="fileName">
+        File Name
+    </label>
+    <input name="fileName"
+           id="fileName"
+           ng-model="upload.fileName"
+           class="form-control"
+           required/>
+    <br/>
+</div>
     <form action="/api/upload"
           method="post"
           enctype="multipart/form-data">
@@ -72,5 +111,5 @@
                value="{{upload.fileName}}"
                style="display: none"/>
         <input type="submit" value="Submit" class="form-control"/>
-    </form>
+    </form>-->
 </div>
