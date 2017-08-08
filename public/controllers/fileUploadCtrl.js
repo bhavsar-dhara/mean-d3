@@ -9,6 +9,12 @@
         var fileId = $routeParams.fileId;
         // console.log(fileId);
 
+        // d3.interval(function() {
+        //     update(d3v4.shuffle(alphabet)
+        //         .slice(0, Math.floor(Math.random() * 26))
+        //         .sort());
+        // }, 1500);
+
         function init() {
 
             if (fileId !== undefined) {
@@ -24,10 +30,12 @@
 
     function scatterPlot(FileService, fileId, $scope) {
 
+        var arrayOfObjects, dataCallback, dataMap, data, regex1, regex2;
+
         // Adds the svg canvas
         // Set the dimensions of the canvas / graph
         // Define the div for the tooltip
-        var svg = d3.select("svg"),
+        var svg = d3.select("svg#chart"),
             margin = {top: 30, right: 20, bottom: 30, left: 50},
             width = +svg.attr("width") - margin.left - margin.right,
             height = +svg.attr("height") - margin.top - margin.bottom,
@@ -73,16 +81,18 @@
             .getFileDataById(fileId)
             .then(function (response) {
                 var addedData = response.data.dataStr;
-                var arrayOfObjects = eval(addedData);
+                arrayOfObjects = eval(addedData);
 
                 if (arrayOfObjects) {
 
-                    // regexp for yyyy-mm-dd hh:MM:ss.ss
-                    var regex1 = new RegExp("^\\d\\d\\d\\d-(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01]) (00|0[0-9]|1[0-9]|2[0-3]):(0?[0-9]|[0-5][0-9]):(0?[0-9]|[0-5][0-9]).([0-9][0-9])$");
-                    // regexp for yyyy-mm-dd hh:MM:ss.s~0~
-                    var regex2 = new RegExp("^\\d\\d\\d\\d-(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01]) (00|0[0-9]|1[0-9]|2[0-3]):(0?[0-9]|[0-5][0-9]):(0?[0-9]|[0-5][0-9]).([0-9])$");
+                    console.log("arrayOfObjects[0]" + JSON.stringify(arrayOfObjects[0]));
 
-                    arrayOfObjects.forEach(function (d) {
+                    // regexp for yyyy-mm-dd hh:MM:ss.ss
+                    regex1 = new RegExp("^\\d\\d\\d\\d-(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01]) (00|0[0-9]|1[0-9]|2[0-3]):(0?[0-9]|[0-5][0-9]):(0?[0-9]|[0-5][0-9]).([0-9][0-9])$");
+                    // regexp for yyyy-mm-dd hh:MM:ss.s~0~
+                    regex2 = new RegExp("^\\d\\d\\d\\d-(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01]) (00|0[0-9]|1[0-9]|2[0-3]):(0?[0-9]|[0-5][0-9]):(0?[0-9]|[0-5][0-9]).([0-9])$");
+
+                    dataCallback = function (d) {
                         // console.log("date time = " + d.TS);
                         // console.log("... " + formatTime(new Date(d.TS)));
                         // console.log(".. : " + regex1.test(d.TS) ? console.log(parseTime(d.TS)) : (regex2.test(d.TS) ? console.log(parseTime(d.TS + '0')) : console.log(parseTimeMS(d.TS))))
@@ -90,9 +100,11 @@
                         d.RN = +d.RN;
                         d.Bar = +d.Bar;
                         d.mV = +d.mV;
-                    });
+                    };
 
-                    var data = arrayOfObjects.map(function (d) {
+                    arrayOfObjects.forEach(dataCallback);
+
+                    dataMap = function (d) {
                         // console.log("milli = " + getMilliSeconds(d));
                         // console.log("date time = " + d.TS);
                         // console.log("... " + formatTime(new Date(d.TS)));
@@ -102,7 +114,9 @@
                             TS: new Date(d.TS),
                             Bar: d.Bar
                         };
-                    });
+                    };
+
+                    data = arrayOfObjects.map(dataMap);
 
                     // Setting data for the table
                     $scope.datas = data;
@@ -155,10 +169,119 @@
                     // Add the Y Axis
                     svg.append("g")
                         .attr("class", "y axis")
-                        .call(yAxis);
+                        .call(yAxis)
+                        .append("text")
+                        .attr("transform", "rotate(-90)")
+                        .attr("y", 6)
+                        .attr("dy", ".71em")
+                        .style("text-anchor", "end")
+                        .text("Pressure (Bar)");
                 }
             });
+
+        d3.select('#chart').on("click", function() {
+            console.log("in on click fn");
+            var newData = [{"TS": "2017-04-23 00:00:02.11", "RN": "288043041", "Bar": "2.150", "mV": "933"}];
+
+            newData.forEach(dataCallback);
+            // dataCallback(newData);
+            console.log("new1 = " + JSON.stringify(newData));
+            newData.map(dataMap);
+            // dataMap(newData);
+            console.log("new2 = " + JSON.stringify(newData));
+            // arrayOfObjects.splice(0,1);
+            // arrayOfObjects.push(newData);
+            // console.log(arrayOfObjects.length + " .. is length");
+            // var length = arrayOfObjects.length - 1;
+            // console.log(length + " .. is len");
+            // dataCallback(arrayOfObjects[length]);
+            //
+            // data = arrayOfObjects.map(dataMap);
+
+            console.log(JSON.stringify(data[0]) + ".......data");
+            data.splice(0, 1);
+            console.log("len1 = " + data.length);
+            data.push(newData);
+            // data.forEach(dataCallback);
+            // data.map(dataMap);
+            // dataCallback(data[data.length - 1]);
+            // dataMap(data[data.length - 1]);
+            console.log("len2 = " + data.length);
+            console.log("new3 = " + JSON.stringify(data[data.length - 1]));
+
+            $scope.datas = null;
+            if ($scope.datas === null) {
+                $scope.datas = data;
+            }
+
+            x.domain(d3.extent(data, function (d) {
+                // console.log("TS = " + d.TS);
+                return d.TS;
+            }));
+            y.domain([0, d3.max(data, function (d) {
+                // console.log("Bar = " + d.Bar);
+                return Math.ceil(d.Bar);
+            })]);
+
+            // redefine the axes
+            var xAxis = d3.svg.axis().scale(x)
+                .orient("bottom").ticks(5).tickFormat(d3.time.format("%H:%M:%S.%L"));
+
+            var yAxis = d3.svg.axis().scale(y)
+                .orient("left").ticks(15);
+
+            d3.select("g.x.axis")
+                .transition().duration(1000)
+                .call(xAxis);
+            d3.select("g.y.axis")
+                .transition().duration(1000)
+                .call(yAxis);
+            d3.selectAll("path")
+                .data(data)
+                .attr("d", line(data));
+            d3.selectAll("circle") // move the circles
+                .transition().duration(1000)
+                .delay(function (d,i) { return i*100})
+                .attr("cx", function (d) {
+                    return x(getDate(d));
+                })
+                .attr("cy", function (d) {
+                    return y(d.Bar);
+                });
+        });
+
+        function updateData() {
+
+            // Get the data again
+
+            // Scale the range of the data again
+            x.domain(d3.extent(data, function (d) {
+                // console.log("TS = " + d.TS);
+                return d.TS;
+            }));
+            y.domain([0, d3.max(data, function (d) {
+                // console.log("Bar = " + d.Bar);
+                return d.Bar;
+            })]);
+
+            // Select the section we want to apply our changes to
+            var svgUpdate = d3.select("chart").transition();
+
+            // Make the changes
+            svgUpdate.select("path")   // change the line
+                .duration(750)
+                .attr("d", line(data));
+            svgUpdate.select("g.x.axis") // change the x axis
+                .duration(750)
+                .call(xAxis);
+            svgUpdate.select("g.y.axis") // change the y axis
+                .duration(750)
+                .call(yAxis);
+
+        }
     }
+
+    // ======================================================================================================================================================================== //
 
     function lineChart(FileService, fileId, $scope) {
         // var d3v4 = require(d3v4);
